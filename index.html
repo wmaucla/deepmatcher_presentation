@@ -11,460 +11,59 @@
 
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
-
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-
-			function showDiv() {
-				div = document.getElementById('hidden_pic');
-				div.style.visibility = "visible";
-			}
-		</script>
 	</head>
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section name="Introduction" data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$" data-separator-notes="^Note:">
-					<script type="text/template">
-						##  Alternative Data via Telematics
-
-						--
-
-						### Zhengwei (William) Ma
-
-						Presented via Reveal JS
-
-						--
-
-						RevealJS is a HTML presentation framework: check it out!
-
-						https://revealjs.com/
-					</script>
-
-			  </section>
-				<section name="Intro Alt Data" data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$" data-separator-notes="^Note:">
-					<script type="text/template">
-						## What is Alternative Data?
-
-						--
-
-						Alternative data is non-traditional data that can be used in the investment process.
-
-						--
-
-						<img src="images/oil_orbital_insights.jpg" width="80%">
-
-						Measuring crude oil levels in tankers, Orbital Insights
-
-						Note:
-							https://www.satellitetoday.com/imagery-and-sensing/2018/09/28/orbital-insights-to-provide-geospatial-analytics-to-rbc-capital-markets/
-
-						--
-
-						<img src="images/thasos_group.png" width="80%">
-
-						Measuring foot traffic following Amazon purchasing Whole Foods, Thasos Group
-
-						Note:
-							http://thasosgroup.com/blog/competitive-impact-lower-prices-whole-foods/
-
-						--
-
-						<img src="images/alt_data_providers.png" width="80%">
-
-						The number of alternative data providers has been increasing rapidly
-
-						Note:
-								https://jbmarwood.com/get-data-quandl-python-excel/
-
-					</script>
-				</section>
-				<section name="Business Objective" data-markdown data-separator-notes="^Note:">
-					<script type="text/template">
-						## Business Objective
-
-						Hypothesis: Vehicle traffic, measured via telematics, can provide an early indicator for quarterly revenue
-
-					</script>
-				</section>
-				<section name="Unfair Advantage" data-markdown data-separator-notes="^Note:">
-					<script data-markdown type="text/template">
-						## Unfair Advantage
-
-						* Telematics data already collected as part of insurance offering
-						* Relatively high quality, precise GPS data
-						* Can leverage this data internally *
-
-					</script>
-				</section>
-				<section name="Challenges" data-markdown data-separator-notes="^Note:">
-					<script data-markdown type="text/template">
-						## Challenges
-
-						* Customers are within the program for 90 days
-						* POIs must be highly correlated with vehicle traffic
-						* Limited data (2013-2017)
-
-					</script>
-				</section>
-				<section name="Project Architecture" data-markdown data-separator-notes="^Note:">
-					<script type="text/template">
-						### Project Architecture
-
-						<img src="images/etl_pipeline.png" width="70%">
-
-						Big Data and AI Strategies, JP Morgan
-
-						Note:
-							https://www.cfasociety.org/cleveland/Lists/Events%20Calendar/Attachments/1045/BIG-Data_AI-JPMmay2017.pdf
-
-					</script>
-				</section>
-				<section name="Task Graph" data-markdown data-separator-notes="^Note:">
-					<script type="text/template">
-						## Task Graph
-
-						<img src="images/solemetrics_task_graph.jpg" width="70%">
-
-					</script>
-				</section>
-				<section name="Telematics Data Overview" data-separator-notes="^Note:">
+				<section name="Introduction">
 					<section>
-						<h2> Telematics data </h2>
-						<video width="80%" controls>
-  						<source src="images/telematics_driving.mov" type="video/mp4">
-  						<p> Not supported boohoo! </p>
-						</video>
-						</br>
-						<span style="color:red"> Data is completely simulated! Part of bitbucket repo</span>
+						<h1> Deepmatcher </h1>
+					</section>
+				</section>
+				<section name="Business Objective">
+					<section>
+						<h1> Business Objective </h1>
 					</section>
 					<section>
-						<h2> Telematics data </h2>
-						<img src="images/sample_telematics.png" width="40%">
-						</br>
-						Sampled at 1 second intervals
-					</section>
-				</section>
-				<section name="Preprocessing" data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$"  data-separator-notes="^Note:">
-					<script type="text/template">
-						## Preprocessing
-
-						<span style="color:red">Problem! Over 2.2 TB of data for ~ 3 years </span>
-
-						If we are looking at vehicle stops, we don't *really* need all of the data, just where they've stopped.
-
-					</script>
-				</section>
-				<section name="Scala Data Engineering" data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$"  data-separator-notes="^Note:">
-					<script type="text/template">
-						### Data Engineering With Scala
-
-						<section>
-						<pre><code>
-						// Not fully functioning code , more of a demo :)
-						import geotrellis.spark.io.index.hilbert.HilbertSpatialKeyIndex
-						import geotrellis.spark.io.index.{KeyIndex, HilbertKeyIndexMethod}
-
-						val telematics = spark.read.parquet("{{ some_input_path }}")
-
-						val telematics_stops = {
-							telematics.filter($"EVENT" == 'Stopped')
-							.filter($"date".between("2018-01-01", "2018-02-01")
-						}
-
-						val getHilbertCell = DoLotsofMath // some fancy math here
-						val getCell = udf(getHilbertCell)
-
-						val telematics_output = {telematics_stops
-							.withColumn("hilbert", getCell($"lat", $"lng"))
-							.select($"lat", $"lng", $"date").sort($"hilbert")
-						}
-
-						telematics_output.coalesce(20).write.parquet(" {{ output_path }}")
-
-						</code></pre>
-						</section>
-
-						--
-
-						Reduces data from 2.2TB ~ 1.5GB! Much better
-
-						--
-
-						## Parquet Storage
-
-						<img src="images/parquet_storage.png" width="80%">
-
-						--
-
-						## Dask Vs Scala
-
-						<img src="images/dask_df.png" width="40%">
-
-					</script>
-				</section>
-				<section name="Geohashing" data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$"  data-separator-notes="^Note:">
-					<script type="text/template">
-						## What is geohashing?
-
-						--
-
-						## Sorting data
-
-						<img src="images/sorting.png" width="80%">
-
-						Sorted data is easy to search through
-
-						--
-
-						## Space Filling Curves
-
-						<img src="images/space_filling_curves.png" width="70%">
-
-						Space filling curves are fractal and orders a 2D grid into 1 dimension
-
-						Great depiction of Hilbert curve courtesy for 3 Blue 1 Brown [here](https://youtu.be/3s7h2MHQtxc?t=756)
-
-						--
-
-						## Geospatial Indexing
-						<section>
-							<img src="images/globe_space_filling_curve.png" width="40%" height="50%">
-							<img src="images/geospatial_indexing.png" width="40%" height="60%">
-						</section>
-
-						--
-
-						## Geospatial Indexing
-
-						<img src="images/hilbert_curve.png" width="80%">
-
-						--
-
-						## Hilbert Geohash Precision
-
-						<img src="images/hilbert_boston.png" width="80%">
-
-					</script>
-				</section>
-				<section name="Geohashing Dask" data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$"  data-separator-notes="^Note:">
-					<script type="text/template">
-						## Geohashed Index with Dask Dataframes
-
-						<img src="images/dask_df.png" width="50%">
-
-						--
-
-						## Dask Dataframes!
-
-						<img src="images/dask_vs_pandas.png" width="30%">
-
-						* Leverages pandas api
-						* Allows computation on data that exceeds RAM
-						* Scalable!
-
-						Note:
-							http://docs.dask.org/en/latest/why.html
-
-						--
-
-						###  Geohashing (Dask) vs Magellan (Spark)
-
-						* Geohashing with dask allows us to keep things (mostly) in python
-						* Ran into Magellan speed issues with thousands of geometries
-						* Conclusion: faster to do a one-time geohashing & leverage dask
-					</script>
-				</section>
-				<section name="Task Graph 2" data-markdown data-separator-notes="^Note:">
-					<script data-markdown type="text/template">
-						## Task Graph Revisited
-
-						<img src="images/solemetrics_task_graph.jpg" width="70%">
-
-					</script>
-				</section>
-				<section name="Creating POI Shapes" data-separator-notes="^Note:">
-					<section>
-						<h2> Creating POI Shapes </h2>
+						Life insurance models heavily rely upon third-party data fields (things like lifestyle information, etc). This data exists in a database with PII that needs to be joined to customer data.
 					</section>
 					<section>
-						<h2> Open Street Maps </h2>
-						<p> Wikipedia of the world, but for maps! </p>
-						<img src="images/overpass_example.png" width="70%">
-					</section>
-					<section>
-						<h2> Webscraping </h2>
-						<img src="images/webscraping.png" width="60%" height="60%">
-					</section>
-				</section>
-				<section name="Example" data-separator-notes="^Note:">
-					<section onclick="javascript:showDiv()">
-						<h2> Example Time! </h2>
-						<p> Can we find users parked at the mall? </p>
-						<img id ="hidden_pic" style="visibility:hidden" src="images/all_telematics_points.png" width="70%">
-					</section>
-					<section>
-						<h2> Open Street Map query </h2>
-						<img src="images/parking_lot.png" width="70%">
-					</section>
-					<section>
-						<h2> Geohashed covering </h2>
-						<img src="images/geohash_neighbors.png" width="70%">
-					</section>
-					<section>
-						<h2> Faster than pure spatial join! </h2>
-
-						<pre><code class="hljs" data-trim>
-							import geopandas as gpd, pandas as pd, dask.dataframe as dd
-							points = pd.DataFrame(....)
-							parking_lot_structures = gpd.GeoDataFrame()
-
-							gpd.sjoin(points, parking_lot_structures)
-
-							# vs
-
-							points = dd.DataFrame(...)
-							points.loc[geohashsed_parking_lot_covering]
-							gpd.sjoin(points, parking_lot_structures)
-						</code></pre>
-
-						<p> Speed up ~ 15% in test dataset </p>
-					</section>
-					<section>
-						<h2> Results </h2>
-						<img src="images/parking_lot_and_points.png" width="70%">
-					</section>
-				</section>
-				<section name="Clustering">
-					<section>
-						<iframe width="800" height="500" marginheight="0" marginwidth="0" src="html/clustering.html"> </iframe>
-						<p> Can we figure out where someone lives from where they have been? </p>
-					</section>
-					<section>
-						<h3> DBSCAN </h3>
-						<p> Sounds like a job for some unsupervised learning!</p>
-					</section>
-					<section data-background="https://iq.opengenus.org/content/images/2018/07/1-tc8UF-h0nQqUfLC8-0uInQ.gif" data-background-size="contain">
-					</section>
-					<section>
-						<h2>DBSCAN</h2>
+						<h2> Challenges </h2>
 						<ul>
-							<li> We assume that, in the long run, where a person stops the most is at their home </li>
-							<li> Easy enough to use scikit-learn's version of clustering! </li>
-							<li> Need to account for the curvature of the Earth / compute in radians </li>
-							<li> Just count total number of points in the cluster </li>
+							<li> Nicknames vs full names </li>
+							<li> Mispellings in names </li>
+							<li> Initials vs full names </li>
 						</ul>
-
-						<pre><code class="hljs" data-trim>
-							DBSCAN(eps="distance metric in rads", min_samples=10,
-							algorithm='ball_tree', metric='haversine').fit(
-							np.radians(random_points_list)))
-						</code></pre>
-
-					</section>
-				</section>
-				<section name="Analysis">
-					<section>
-						<h2> POI Analysis </h2>
-						<img src="images/thasos_time_series.png" width="70%">
-						<p> * Image comes from <a href="http://thasosgroup.com/#6"> Thasos </a> Group </p>
 					</section>
 					<section>
-						<h2> Time Series Analysis </h2>
-						<p> Compared revenue vs car traffic at places like Six Flags </p>
+						<h2> Objective </h2>
 						<ul>
-							<li> Rolling Mean </li>
-							<li> Exponential Weighted Moving Average </li>
-							<li> Wanted to try Dynamic Time Warping and ARIMA (not enough data -- only a few quarters) </li>
-						</ul>
-						<aside class="notes">
-							Took the rolling mean (average of last 52 weeks)
-							DTW is one of the algorithms for measuring similarity between two temporal sequences, which may vary in speed.
-						</aside>
-					</section>
-				</section>
-				<section name="Normalization">
-					<section>
-						<h2> Normalization </h2>
-
-						<p> Challenge from before: Customers are within the program for 90 days </p>
-					</section>
-					<section>
-						<h2> Data Theories </h2>
-						<ul>
-							<li> Ideally want our sample to be large, representative, longitudinal </li>
-							<li> Our data is too spread out -- need to aggregate and stratify </li>
-							<li> Can we achieve an unbiased estimate? </li>
-						</ul>
-						<aside class="notes">
-							Longitudinal studies follow the same sample of people over time.
-						</aside>
-					</section>
-					<section id="fragments">
-						<h2> Normalization Approaches </h2>
-						<ul>
-							<li class="current-visible fragment"> $ \sum_{zip} \frac{Visitors}{Users} $ </li>
-							<li class="current-visible fragment"> $ \frac{\sum_{zip} \frac{Visitors}{Users} * Census_{Pop}}{\sum_{zip} Census_{Pop}} $ </li>
-							<li class="current-visible fragment"> $ \frac{\sum_{income bracket} \frac{Visitors}{Users} * Pop}{\sum_{income bracket} Pop} $ </li>
-							<li class="current-visible fragment"> $ \frac{\sum_{income bracket} \frac{Visitors}{Users} * Pop}{\sum_{income bracket} Pop} $ @ weekly basis </li>
+							<li> Develop a tool that allows automation of this process </li>
+							<li> Produces high quality matches </li>
+							<li> Easily accessible interface for users </li>
 						</ul>
 					</section>
 				</section>
-				<section name="Error">
+				<section name="Entity Matching">
 					<section>
-						<h1> Error </h1>
+						<h1> Entity Matching </h1>
 					</section>
 					<section>
-						<img src="images/error.png" width="70%">
+						<p>"The results show that DL does not outperform current solutions on structured EM,
+							but it can significantly outperform them on textual and dirty EM"</p>
+						<i> <a href="http://pages.cs.wisc.edu/~anhai/papers1/deepmatcher-sigmod18.pdf">Deep Learning For Entity Matching: A Design Space Exploration </a> </i>
+					</section>
+					<section>
+						<img src="images/types_em.png">
+					</section>
+					<section>
+						<img src="images/matching_diagram.png">
+					</section>
+					<section>
+						<img src="images/design_space.png">
+					</section>
+				</section>
 
-						<p> Great <a href="https://vimeo.com/252041605"> discussion </a> from Thasos's John Collins </p>
-					</section>
-
-				</section>
-				<section name="Results">
-					<section>
-						<h1> Results! </h1>
-
-						<p> Hypothesis: Vehicle traffic, measured via telematics, can provide an early indicator for quarterly revenue </p>
-						<p> Results are good.... kind of </p>
-					</section>
-					<section>
-						<h2> Hypotheses and Conclusions </h2>
-						<ul>
-							<li class="fragment"> Telematics data gives insights on financial signals &#9989;</li>
-							<li class="fragment"> This data can be leveraged within the company &#10060;</li>
-								<ul class="fragment" style="font-size:30px">
-									<li> Few places that correspond with vehicle traffic & are interesting internally </li>
-									<li> Need stronger nationwide presence </li>
-									<li> Rollout timeline impact signals </li>
-								</ul>
-							<li class="fragment"> This data provides an unfair advantage &#8263;</li>
-								<ul class="fragment" style="font-size:30px">
-									<li> Other companies sell much larger data sets (e.g. Thasos) </li>
-								</ul>
-						</ul>
-					</section>
-				</section>
-				<section name="Conclusion">
-					<h2> Ultimate Decision </h2>
-					<p> Hold off and wait for more data, and ask to record > 90 days </p>
-				</section>
-				<section name="Recap">
-					<h2> Recap </h2>
-					<ul>
-						<li> Theory was that telematics traffic measured at POIs can generate an early indicator of revenue </li>
-						<li> Successful for some POIs, after normalization </li>
-						<li> Ultimately decided to postpone this project </li>
-						<li> From no clue what a data scientist does to completion: ~6 months </li>
-					</ul>
-				</section>
-				<section name="Thank you!" data-background="https://gph.to/2RaxXRY" data-background-size="contain">
-				</section>
 			</div>
 		</div>
 

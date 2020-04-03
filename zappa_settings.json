@@ -1,0 +1,40 @@
+{
+    "dev": {
+        "app_function": "app.app",
+        "profile_name": "default",
+        "project_name": "turbo-invention",
+        "runtime": "python3.7",
+        "s3_bucket": "turboexample",
+        "aws_region": "us-west-2",
+        "slim_handler": true
+    },
+    "qa": {
+        "app_function": "app.app",
+        "profile_name": "default",
+        "project_name": "turbo-invention",
+        "runtime": "python3.7",
+        "s3_bucket": "qaexample",
+        "aws_region": "us-west-2",
+        "slim_handler": true
+    },
+    "albert": {
+        "app_function": "app.app",
+        "profile_name": "default",
+        "memory_size": 3008,
+        "project_name": "turbo-invention",
+        "runtime": "python3.6",
+        "s3_bucket": "albertexample",
+        "aws_region": "us-west-2",
+        "slim_handler": "true"
+    },
+    "prod": {
+        "app_function": "app.app",
+        "profile_name": "default",
+        "memory_size": 3008,
+        "project_name": "turbo-invention",
+        "runtime": "python3.6",
+        "s3_bucket": "albertexample",
+        "aws_region": "us-west-2",
+        "slim_handler": "true"
+    }
+}
