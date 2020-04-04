@@ -117,16 +117,12 @@
 						</p>
 					</section>
 					<section>
-						<img src="images/azuresignon.png">
-						<p>
-							Security measures: Flask OIDC configured with Azure SSO - Azure app registration.
-						</p>
-					</section>
-					<section>
 						<h3> Deployment </h3>
 						<ul>
 							<li class="fragment"> Dockerize app and deploy to Azure container instance! </li>
-							<li class="fragment"> ... but doesn't work with virtual nets - isn't secure :( </li>
+							<li class="fragment"> ... but container instances don't support GPU containers </li>
+							<li class="fragment"> Ok, write it without GPU! </li>
+							<li class="fragment"> ... but still doesn't work with virtual nets - isn't secure :( </li>
 							<li class="fragment"> So, deploy to kubernetes cluster! </li>
 							<li class="fragment"> ... but memory limit on container - model file too big </li>
 						</ul>
@@ -136,9 +132,26 @@
 						<ul>
 							<li> Produce high quality matches - Deepmatcher &#9989; </li>
 							<li> Develop an automated process - Luigi pipeline &#9989; </li>
-							<li class="fragment"> Easily accessible interface for users - Flask website deployed to Kubernetes &#10060; </li>
+							<li class="fragment"> Easily accessible interface for users - Flask website deployed to Kubernetes &#8263; </li>
 						</ul>
 					</section>
+				</section>
+				<section>
+					<section>
+						<h2> Summary </h2>
+					</section>
+					<section>
+						<h2> Objective </h2>
+							<ul>
+								<li> Produce high quality matches - Deepmatcher &#9989; </li>
+								<li> Develop an automated process - Luigi pipeline &#9989; </li>
+								<li> Easily accessible interface for users - Flask website deployed to Kubernetes &#8263; </li>
+							</ul>
+					</section>
+					<section>
+						<img src="images/overview.png">
+					</section>
+				</section>
 				</section>
 			</div>
 		</div>
