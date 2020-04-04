@@ -22,10 +22,10 @@
 				</section>
 				<section name="Business Objective">
 					<section>
-						<h1> Business Objective </h1>
+						<h2> Business Objective </h2>
 					</section>
 					<section>
-						Life insurance models heavily rely upon third-party data fields (things like lifestyle information, etc). This data exists in a database with PII that needs to be joined to customer data.
+						Life insurance models heavily rely upon third-party data. Using PII, this data needs to be joined to customer data.
 					</section>
 					<section>
 						<h2> Challenges </h2>
@@ -38,15 +38,15 @@
 					<section>
 						<h2> Objective </h2>
 						<ul>
-							<li> Develop a tool that allows automation of this process </li>
-							<li> Produces high quality matches </li>
-							<li> Easily accessible interface for users </li>
+							<li class="fragment"> Produce high quality matches </li>
+							<li class="fragment"> Develop an automated process </li>
+							<li class="fragment"> Easily accessible interface for users </li>
 						</ul>
 					</section>
 				</section>
 				<section name="Entity Matching">
 					<section>
-						<h1> Entity Matching </h1>
+						<h2> Entity Matching </h2>
 					</section>
 					<section>
 						<p>"The results show that DL does not outperform current solutions on structured EM,
@@ -62,8 +62,84 @@
 					<section>
 						<img src="images/design_space.png">
 					</section>
+					<section>
+						<h2> The Magic of NLP </h2>
+						<img src="images/deepmatcher.png">
+						<p>
+							Used existing matched data as labels to feed into Deepmatcher model - results were very accurate!
+						</p>
+					</section>
+					<section id="fragments">
+						<h2> Objective </h2>
+						<ul>
+							<li class="fragment"> Produce high quality matches - Deepmatcher &#9989; </li>
+						</ul>
+					</section>
 				</section>
-
+				<section name="Pipelining">
+					<section>
+						<h2> Pipelining </h2>
+						<p> The more you plan, the luckier you get </p>
+					</section>
+					<section>
+						<h3> Luigi </h3>
+						<p> Pipelined with the old favorite, luigi. Highlights included:
+						<ul>
+							<li> Code for read/write to Azure </li>
+							<li> SQLServer tasks with descriptor classes for salted targets - yuck! </li>
+						</ul>
+						</p>
+					</section>
+					<section>
+						<h2> Task Graph </h2>
+						<img src="images/deepmatcher_task_graph.png" height="50%">
+					</section>
+					<section>
+					<h2> Objective </h2>
+						<ul>
+							<li> Produce high quality matches - Deepmatcher &#9989; </li>
+							<li class="fragment"> Develop an automated process - Luigi pipeline &#9989; </li>
+						</ul>
+					</section>
+				</section>
+				<section name="Front-End">
+					<section>
+						<h2> Front-End </h2>
+					</section>
+					<section>
+						<h3> Bootstrap and Flask </h3>
+						<img src="images/flask_front_end.png">
+					</section>
+					<section>
+						<img src="images/azuresignon.png">
+						<p>
+							Security measures: Flask OIDC configured with Azure SSO - Azure app registration.
+						</p>
+					</section>
+					<section>
+						<img src="images/azuresignon.png">
+						<p>
+							Security measures: Flask OIDC configured with Azure SSO - Azure app registration.
+						</p>
+					</section>
+					<section>
+						<h3> Deployment </h3>
+						<ul>
+							<li class="fragment"> Dockerize app and deploy to Azure container instance! </li>
+							<li class="fragment"> ... but doesn't work with virtual nets - isn't secure :( </li>
+							<li class="fragment"> So, deploy to kubernetes cluster! </li>
+							<li class="fragment"> ... but memory limit on container - model file too big </li>
+						</ul>
+					</section>
+					<section>
+					<h2> Objective </h2>
+						<ul>
+							<li> Produce high quality matches - Deepmatcher &#9989; </li>
+							<li> Develop an automated process - Luigi pipeline &#9989; </li>
+							<li class="fragment"> Easily accessible interface for users - Flask website deployed to Kubernetes &#10060; </li>
+						</ul>
+					</section>
+				</section>
 			</div>
 		</div>
 
