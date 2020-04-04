@@ -6,11 +6,11 @@
 
 		<title>reveal.js</title>
 
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/solarized.css">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/reveal.css') }}">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/theme/moon.css') }}">
 
 		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<link rel="stylesheet" href="static/lib/css/zenburn.css">
 	</head>
 	<body>
 		<div class="reveal">
@@ -28,11 +28,14 @@
 						Life insurance models heavily rely upon third-party data. Using PII, this data needs to be joined to customer data.
 					</section>
 					<section>
+						<img src="static/images/matching.png">
+					</section>
+					<section>
 						<h2> Challenges </h2>
 						<ul>
 							<li> Nicknames vs full names </li>
 							<li> Mispellings in names </li>
-							<li> Initials vs full names </li>
+							<li> Missing data fields </li>
 						</ul>
 					</section>
 					<section>
@@ -42,6 +45,9 @@
 							<li class="fragment"> Develop an automated process </li>
 							<li class="fragment"> Easily accessible interface for users </li>
 						</ul>
+					</section>
+					<section>
+						<img src="static/images/deepmatcher_flow.png">
 					</section>
 				</section>
 				<section name="Entity Matching">
@@ -54,17 +60,17 @@
 						<i> <a href="http://pages.cs.wisc.edu/~anhai/papers1/deepmatcher-sigmod18.pdf">Deep Learning For Entity Matching: A Design Space Exploration </a> </i>
 					</section>
 					<section>
-						<img src="images/types_em.png">
+						<img src="static/images/types_em.png">
 					</section>
 					<section>
-						<img src="images/matching_diagram.png">
+						<img src="static/images/matching_diagram.png">
 					</section>
 					<section>
-						<img src="images/design_space.png">
+						<img src="static/images/design_space.png">
 					</section>
 					<section>
 						<h2> The Magic of NLP </h2>
-						<img src="images/deepmatcher.png">
+						<img src="static/images/deepmatcher.png">
 						<p>
 							Used existing matched data as labels to feed into Deepmatcher model - results were very accurate!
 						</p>
@@ -92,7 +98,9 @@
 					</section>
 					<section>
 						<h2> Task Graph </h2>
-						<img src="images/deepmatcher_task_graph.png" height="50%">
+						<p>
+							<img src="static/images/deepmatcher_task_graph.png" height="50%">
+						</p>
 					</section>
 					<section>
 					<h2> Objective </h2>
@@ -102,16 +110,17 @@
 						</ul>
 					</section>
 				</section>
-				<section name="Front-End">
+				<section name="DevOps">
 					<section>
-						<h2> Front-End </h2>
+						<h2> DevOps </h2>
+						<img src="static/images/devops.jpg">
 					</section>
 					<section>
 						<h3> Bootstrap and Flask </h3>
-						<img src="images/flask_front_end.png">
+						<img src="static/images/flask_front_end.png">
 					</section>
 					<section>
-						<img src="images/azuresignon.png">
+						<img src="static/images/azuresignon.png">
 						<p>
 							Security measures: Flask OIDC configured with Azure SSO - Azure app registration.
 						</p>
@@ -143,21 +152,21 @@
 					<section>
 						<h2> Objective </h2>
 							<ul>
-								<li> Produce high quality matches - Deepmatcher &#9989; </li>
-								<li> Develop an automated process - Luigi pipeline &#9989; </li>
-								<li> Easily accessible interface for users - Flask website deployed to Kubernetes &#8263; </li>
+								<li> Produce high quality matches - Deepmatcher </li>
+								<li> Develop an automated process - Luigi pipeline </li>
+								<li> Accessible interface for users - Flask website accessed through docker on VMs </li>
 							</ul>
 					</section>
 					<section>
-						<img src="images/overview.png">
+						<img src="static/images/overview.png">
 					</section>
 				</section>
 				</section>
 			</div>
 		</div>
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.js"></script>
+		<script src="static/lib/js/head.min.js"></script>
+		<script src="static/js/reveal.js"></script>
 
 		<script>
 			Reveal.initialize({
@@ -166,11 +175,11 @@
 					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
 				},
 				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/math/math.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+					{ src: 'static/plugin/markdown/marked.js' },
+					{ src: 'static/plugin/markdown/markdown.js' },
+					{ src: 'static/plugin/notes/notes.js', async: true },
+					{ src: 'static/plugin/math/math.js', async: true },
+					{ src: 'static/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
 				]
 			});
 		</script>
