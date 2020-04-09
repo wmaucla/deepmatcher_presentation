@@ -43,21 +43,18 @@
 					<section>
 						<h2> Challenges </h2>
 						<ul>
-							<li> Nicknames vs full names </li>
-							<li> Mispellings in names </li>
-							<li> Missing data fields </li>
+							<li> Data quality - nicknames vs full names, mispellings, missing data fields, etc </li>
+							<li> No repeatability / one off queries for each case </li>
+							<li> Current process is very manual; requires an user to match each case individually </li>
 						</ul>
 					</section>
 					<section>
 						<h2> Objective </h2>
 						<ul>
 							<li class="fragment"> Produce high quality matches </li>
-							<li class="fragment"> Develop an automated process </li>
+							<li class="fragment"> Develop an automated process for new cases </li>
 							<li class="fragment"> Easily accessible interface for users </li>
 						</ul>
-					</section>
-					<section>
-						<img src="{{ url_for('static', filename='images/deepmatcher_flow.png') }}">
 					</section>
 				</section>
 				<section name="Entity Matching">
@@ -82,7 +79,13 @@
 						<h2> The Magic of NLP </h2>
 						<img src="{{ url_for('static', filename='images/deepmatcher.png') }}">
 						<p>
-							Used existing matched data as labels to feed into Deepmatcher model - results were very accurate!
+							Used existing matched data as labels to feed into Deepmatcher model - precision/recall ~ 95%!
+						</p>
+					</section>
+					<section>
+						<img src="{{ url_for('static', filename='images/deepmatcher_flow.png') }}">
+						<p>
+						Deepmatcher is a layer on top of what already exists - SQL component produces possible matches with very relaxed rules, Deepmatcher fine-tunes
 						</p>
 					</section>
 					<section id="fragments">
@@ -109,7 +112,7 @@
 					<section>
 						<h2> Task Graph </h2>
 						<p>
-							<img src="{{ url_for('static', filename='images/deepmatcher_task_graph.png') }}" height="50%">
+							<img src="{{ url_for('static', filename='images/deepmatcher_task_graph.png') }}" style="width:40%;height:40%">
 						</p>
 					</section>
 					<section>
@@ -123,7 +126,7 @@
 				<section name="DevOps">
 					<section>
 						<h2> DevOps </h2>
-						<img src="{{ url_for('static', filename='images/devops.jpg') }}">
+						<img src="{{ url_for('static', filename='images/devops.jpg') }}" style="height=50%">
 					</section>
 					<section>
 						<h3> Bootstrap and Flask </h3>
@@ -138,10 +141,11 @@
 					<section>
 						<h3> Deployment </h3>
 						<ul>
+							<li> Options: VM -> Azure Kubernetes -> Azure Container Instance -> Azure Function </li>
 							<li class="fragment"> Dockerize app and deploy to Azure container instance! </li>
-							<li class="fragment"> ... but container instances don't support GPU containers </li>
+							<li class="fragment"> ... but container instances <a href="https://docs.microsoft.com/en-us/azure/container-instances/container-instances-gpu"> don't </a> support GPU containers with Virtual Nets </li>
 							<li class="fragment"> Ok, write it without GPU! </li>
-							<li class="fragment"> ... but still doesn't work with virtual nets - isn't secure :( </li>
+							<li class="fragment"> ... something something network security IP whitelisting </li>
 							<li class="fragment"> So, deploy to kubernetes cluster! </li>
 							<li class="fragment"> ... but memory limit on container - model file too big </li>
 						</ul>
